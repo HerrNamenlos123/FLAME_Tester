@@ -16,7 +16,7 @@ workspace (projectName)
     filter {}
 
 -- Include the subprojects
-include "modules/FLAME_Protocol"
+include "modules/FLAME"
 
 -- Actual project
 project (projectName)
@@ -67,7 +67,8 @@ project (projectName)
     files { "include/**", "src/**" }
 
     -- NetLib dependency
-    dependson "FLAME_Protocol"
-    includedirs (FLAMEPROTOCOL_INCLUDE_DIRS)
-    libdirs (FLAMEPROTOCOL_LINK_DIRS)
-    links (FLAMEPROTOCOL_LINKS)
+    dependson "FLAME"
+    includedirs (FLAME_INCLUDE_DIRS)
+    libdirs (FLAME_LINK_DIRS)
+    links (FLAME_LINKS)
+    
