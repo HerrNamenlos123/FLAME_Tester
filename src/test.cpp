@@ -1,6 +1,7 @@
 
 #include "pch.h"
+#include "Flame.h"
 
 int main() {
-    std::cout << "Hello world" << std::endl;
+    FlameTest();
 }
