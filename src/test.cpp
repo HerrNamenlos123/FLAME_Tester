@@ -5,7 +5,6 @@
 int main() {
 
     try {
-
         FlameTest();
     }
     catch (const std::exception& e) {
