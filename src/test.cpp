@@ -3,7 +3,14 @@
 #include "Flame.h"
 
 int main() {
-    FlameTest();
+
+    try {
+
+        FlameTest();
+    }
+    catch (const std::exception& e) {
+        std::cout << e.what() << std::endl;
+    }
 
 
 }
