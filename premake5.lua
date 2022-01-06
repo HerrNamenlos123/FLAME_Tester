@@ -71,4 +71,5 @@ project (projectName)
     includedirs (FLAME_INCLUDE_DIRS)
     libdirs (FLAME_LINK_DIRS)
     links (FLAME_LINKS)
+    defines (FLAME_DEFINES)
     
