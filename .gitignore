@@ -31,9 +31,14 @@
 *.out
 *.app
 
+# Conan
+conan.lock
+conanbuildinfo.cmake
+conanbuildinfo.txt
+conaninfo.txt
+graph_info.json
+
 bin
 build
 *.sln
 .vs
-!premake5/**
-!modules/**
