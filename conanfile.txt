@@ -3,5 +3,4 @@ asio/1.22.1
 spdlog/1.9.2
 
 [generators]
-cmake
 cmake_find_package
