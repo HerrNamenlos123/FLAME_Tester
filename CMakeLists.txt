@@ -93,11 +93,3 @@ install(
     RUNTIME DESTINATION "bin"
     INCLUDES DESTINATION "include"
 )
-
-# Set default install path on windows
-if (WIN32)
-    if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-        set (CMAKE_INSTALL_PREFIX "C:/dev" CACHE PATH "default install path" FORCE)
-    endif ()
-endif ()
-
