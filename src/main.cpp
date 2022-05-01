@@ -1,6 +1,6 @@
 
-#include "pch.h"
 #include "Flame.h"
+#include <iostream>
 
 int main() {
 

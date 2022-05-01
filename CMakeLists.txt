@@ -1,26 +1,30 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(FLAME_Tester VERSION 1.0.0 LANGUAGES CXX)
+project(FLAME_Tester VERSION 1.0.0 LANGUAGES C CXX)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
+
+
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose Release or Debug" FORCE)
 endif()
 
 
-################
-# Dependencies #
-################
+
+##################################
+# Options: Library configuration #
+##################################
 
 find_package(FLAME REQUIRED)
 
 
 
-##################################
-# Options: Library configuration #
-##################################
+################
+# Dependencies #
+################
+
 
 
 
@@ -29,19 +33,23 @@ find_package(FLAME REQUIRED)
 # Static library definition #
 #############################
 
-file(GLOB_RECURSE HEADER_FILES CONFIGURE_DEPENDS "include/*")
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS "src/*")
+file(GLOB_RECURSE HEADER_FILES CONFIGURE_DEPENDS "include/*")
+file(GLOB_RECURSE CONFIG_FILES CONFIGURE_DEPENDS "cmake/*")
+list(APPEND CONFIG_FILES "${CMAKE_SOURCE_DIR}/CMakeLists.txt")
+list(APPEND CONFIG_FILES "${CMAKE_SOURCE_DIR}/conanfile.txt")
 
-add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES})
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
+add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES} ${CONFIG_FILES})
+
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
+set_target_properties(${PROJECT_NAME} PROPERTIES C_STANDARD 11)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-)
-
-
+if(MSVC)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wno-psabi)
+endif()
 
 
 ############################
@@ -59,12 +67,17 @@ endif()
 
 
 
-
 ###########
 # Linking #
 ###########
 
 target_link_libraries(${PROJECT_NAME} FLAME::FLAME)
+
+
+
+#######################
+# Precompiled Headers #
+#######################
 
 
 
@@ -75,8 +88,15 @@ target_link_libraries(${PROJECT_NAME} FLAME::FLAME)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" PREFIX "Source Files" FILES ${SRC_FILES})
-source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" PREFIX "Header Files" FILES ${HEADER_FILES})
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" PREFIX "src" FILES ${SRC_FILES})
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" PREFIX "include" FILES ${HEADER_FILES})
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${CONFIG_FILES})
+
+
+##################
+# Subdirectories #
+##################
+
 
 
 

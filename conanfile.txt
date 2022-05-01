@@ -1,6 +1,7 @@
 [requires]
 asio/1.22.1
 spdlog/1.9.2
+protobuf/3.19.2
 
 [generators]
 CMakeDeps
