@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(FLAME_Tester VERSION 1.0.0 LANGUAGES C CXX)
+set(TARGET_NAME FLAME_Tester)
+project(${TARGET_NAME} VERSION 1.0.0 LANGUAGES C CXX)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
@@ -17,7 +18,8 @@ endif()
 # Options: Library configuration #
 ##################################
 
-find_package(FLAME REQUIRED)
+#find_package(FLAME REQUIRED)
+add_subdirectory(/home/me/Documents/FLAME build)
 
 
 
@@ -39,16 +41,16 @@ file(GLOB_RECURSE CONFIG_FILES CONFIGURE_DEPENDS "cmake/*")
 list(APPEND CONFIG_FILES "${CMAKE_SOURCE_DIR}/CMakeLists.txt")
 list(APPEND CONFIG_FILES "${CMAKE_SOURCE_DIR}/conanfile.txt")
 
-add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES} ${CONFIG_FILES})
+add_executable(${TARGET_NAME} ${SRC_FILES} ${HEADER_FILES} ${CONFIG_FILES})
 
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-set_target_properties(${PROJECT_NAME} PROPERTIES C_STANDARD 11)
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)
+target_compile_features(${TARGET_NAME} PRIVATE cxx_std_17)
+set_target_properties(${TARGET_NAME} PROPERTIES C_STANDARD 11)
+set_target_properties(${TARGET_NAME} PROPERTIES CXX_EXTENSIONS OFF)
 
 if(MSVC)
-    set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    set_property(TARGET ${TARGET_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 else()
-    target_compile_options(${PROJECT_NAME} PRIVATE -Wno-psabi)
+    target_compile_options(${TARGET_NAME} PRIVATE -Wno-psabi)
 endif()
 
 
@@ -57,7 +59,7 @@ endif()
 ############################
 
 if (WIN32)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE
+    target_compile_definitions(${TARGET_NAME} PRIVATE
        WIN32_LEAN_AND_MEAN      # Prevents Windows.h from adding unnecessary includes
        NOMINMAX                 # Prevents Windows.h from defining min/max as macros 
        _CRT_SECURE_NO_WARNINGS
@@ -71,7 +73,8 @@ endif()
 # Linking #
 ###########
 
-target_link_libraries(${PROJECT_NAME} FLAME::FLAME)
+#target_link_libraries(${TARGET_NAME} FLAME::FLAME)
+target_link_libraries(${TARGET_NAME} FLAME)
 
 
 
@@ -106,8 +109,8 @@ source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${CONFIG_FILES})
 
 # Install binaries
 install(
-    TARGETS ${PROJECT_NAME}
-    EXPORT ${PROJECT_NAME}Targets
+    TARGETS ${TARGET_NAME}
+    EXPORT ${TARGET_NAME}Targets
     LIBRARY DESTINATION "lib"
     ARCHIVE DESTINATION "lib"
     RUNTIME DESTINATION "bin"
