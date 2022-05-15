@@ -1,14 +1,9 @@
 
-#include "Flame.h"
-#include <iostream>
+#include "BatteryApp.h"
 
-int main() {
+int main(int argc, const char** argv) {
 
-    try {
-        FlameTest();
-    }
-    catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
-    }
+    BatteryApp app;
+    app.run(argc, argv);
 
 }

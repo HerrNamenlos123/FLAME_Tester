@@ -19,7 +19,8 @@ endif()
 ##################################
 
 #find_package(FLAME REQUIRED)
-add_subdirectory(/home/me/Documents/FLAME build)
+find_package(Battery REQUIRED)
+add_subdirectory(../FLAME build)
 
 
 
@@ -42,6 +43,11 @@ list(APPEND CONFIG_FILES "${CMAKE_SOURCE_DIR}/CMakeLists.txt")
 list(APPEND CONFIG_FILES "${CMAKE_SOURCE_DIR}/conanfile.txt")
 
 add_executable(${TARGET_NAME} ${SRC_FILES} ${HEADER_FILES} ${CONFIG_FILES})
+
+target_include_directories(${TARGET_NAME} PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
 
 target_compile_features(${TARGET_NAME} PRIVATE cxx_std_17)
 set_target_properties(${TARGET_NAME} PROPERTIES C_STANDARD 11)
@@ -75,6 +81,7 @@ endif()
 
 #target_link_libraries(${TARGET_NAME} FLAME::FLAME)
 target_link_libraries(${TARGET_NAME} FLAME)
+target_link_libraries(${TARGET_NAME} Battery::Battery)
 
 
 
