@@ -1,0 +1,3 @@
+[submodule "modules/FLAME"]
+	path = modules/FLAME
+	url = https://github.com/HerrNamenlos123/FLAME.git
