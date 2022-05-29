@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.5)
 
 set(TARGET_NAME FLAME_Tester)
 project(${TARGET_NAME} VERSION 1.0.0 LANGUAGES C CXX)
@@ -18,9 +18,7 @@ endif()
 # Options: Library configuration #
 ##################################
 
-#find_package(FLAME REQUIRED)
-find_package(Battery REQUIRED)
-add_subdirectory(../FLAME build)
+add_subdirectory(modules/FLAME)
 
 
 
@@ -36,11 +34,11 @@ add_subdirectory(../FLAME build)
 # Static library definition #
 #############################
 
-file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS "src/*")
-file(GLOB_RECURSE HEADER_FILES CONFIGURE_DEPENDS "include/*")
-file(GLOB_RECURSE CONFIG_FILES CONFIGURE_DEPENDS "cmake/*")
-list(APPEND CONFIG_FILES "${CMAKE_SOURCE_DIR}/CMakeLists.txt")
-list(APPEND CONFIG_FILES "${CMAKE_SOURCE_DIR}/conanfile.txt")
+file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/src/*")
+file(GLOB_RECURSE HEADER_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/include/*")
+file(GLOB_RECURSE CONFIG_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/cmake/*")
+list(APPEND CONFIG_FILES "${CMAKE_CURRENT_LIST_DIR}/CMakeLists.txt")
+list(APPEND CONFIG_FILES "${CMAKE_CURRENT_LIST_DIR}/conanfile.txt")
 
 add_executable(${TARGET_NAME} ${SRC_FILES} ${HEADER_FILES} ${CONFIG_FILES})
 
@@ -49,7 +47,12 @@ target_include_directories(${TARGET_NAME} PUBLIC
     $<INSTALL_INTERFACE:include>
 )
 
-target_compile_features(${TARGET_NAME} PRIVATE cxx_std_17)
+if (MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
+else ()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+endif ()
+
 set_target_properties(${TARGET_NAME} PROPERTIES C_STANDARD 11)
 set_target_properties(${TARGET_NAME} PROPERTIES CXX_EXTENSIONS OFF)
 
@@ -79,9 +82,7 @@ endif()
 # Linking #
 ###########
 
-#target_link_libraries(${TARGET_NAME} FLAME::FLAME)
-target_link_libraries(${TARGET_NAME} FLAME)
-target_link_libraries(${TARGET_NAME} Battery::Battery)
+target_link_libraries(${TARGET_NAME} FLAME::FLAME)
 
 
 
@@ -96,11 +97,11 @@ target_link_libraries(${TARGET_NAME} Battery::Battery)
 # IDE #
 #######
 
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
-source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" PREFIX "src" FILES ${SRC_FILES})
-source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" PREFIX "include" FILES ${HEADER_FILES})
-source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${CONFIG_FILES})
+#set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+#
+#source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" PREFIX "src" FILES ${SRC_FILES})
+#source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" PREFIX "include" FILES ${HEADER_FILES})
+#source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${CONFIG_FILES})
 
 
 ##################
